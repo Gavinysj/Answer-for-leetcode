@@ -30,28 +30,44 @@
 #include <iostream>
 using namespace::std;
 
-void rotate1(int nums[], int n, int k) {
+void rotate(int nums[], int n, int k) {
+    k%=n;
+    if(k==0)
+        return;
     
-    k=k%n;
-    for (int i=0; i<k; i++) {
-        nums[n-1-i] = (nums[n-1-i])^(nums[k-1-i]);
-        nums[k-1-i] = (nums[n-1-i])^(nums[k-i-i]);
-        nums[n-1-i] = (nums[n-1-i])^(nums[k-i-i]);
-        cout<<(n-i-1)<<":"<<nums[n-1-i]<<" "<<k-1-i<<":"<<nums[k-i-1]<<endl;
+    int *tmparray = new int[k];
+    int tmpcount = 0;
+    for(int i=0; i<k; ++i)
+    {
+        tmparray[i] = nums[n-k+i];
+        tmpcount = (n-k+i)>=k ? n-2*k+i : 2*n-2*k+i;
+        nums[n-k+i] = nums[tmpcount];
     }
+    
+    if (n>2*k) {
+        for (int i=0; i<n-2*k; ++i) {
+            nums[n-k-i-1] = nums[n-2*k-i-1];
+        }
+    }
+    
+    for (int i=0; i<k; ++i) {
+        nums[i] = tmparray[i];
+    }
+    
+    delete tmparray;
     
 }
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    int input[] = {1,2,3};
+    int input[] = {1,2};
     
-    rotate1(input, 3, 1);
+    rotate(input, 2, 1);
     
-    for (int i=0; i<3; i++) {
+    for (int i=0; i<2; i++) {
         cout<<input[i]<<endl;
     }
     
-    std::cout << "Hello, World!\n";
+    //std::cout << "Hello, World!\n";
     return 0;
 }
