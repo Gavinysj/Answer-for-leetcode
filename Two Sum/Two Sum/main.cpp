@@ -27,19 +27,58 @@ using namespace::std;
 vector<int> twoSum(vector<int> &numbers, int target) {
     
     vector<int> ret(2, 0);
+    vector<int> tmp;
     auto size = numbers.size();
-    for(decltype(numbers.size()) i=0; i<size; i++)
+    
+    int count=0;
+    
+    for (int i=0; i<size; ++i) {
+        if (target>=numbers[i]) {
+            tmp.push_back(numbers[i]);
+            ++count;
+        }
+    }
+    
+    size = tmp.size();
+    
+    if (count==size) {
+        count--;
+    }
+    
+    int temp_l, temp_r, temp;
+    
+    for(int i=0; i<count; ++i)
     {
-        if (numbers[i]==0 || numbers[i]>=target)
-            continue;
-        for (decltype(numbers.size()) j=(i+1); j<size; j++) {
-            if (numbers[j]==0 || numbers[j]>=target)
-                continue;
-            
-            if ((numbers[i]+numbers[j])==target) {
-                ret[0] = numbers[i]>numbers[j] ? numbers[j]:numbers[i];
-                ret[1] = target - ret[0];
-                break;
+        temp_r = count;
+        temp = count;
+        temp_l = 0;
+        while (1) {
+            //cout<<"["<<i<<"]"<<", temp="<<temp<<", temp_l="<<temp_l<<",temp_r="<<temp_r<<endl;
+            if (tmp[i]+tmp[temp]>target) {
+                if (temp==temp_l) {
+                    break;
+                }
+                temp_r = temp;
+                temp = (temp_l+temp_r)/2;
+                if (temp==temp_r) {
+                    break;
+                }
+            }else if(tmp[i]+tmp[temp]<target)
+            {
+                if (temp==temp_r) {
+                    break;
+                }
+                temp_l = temp;
+                temp = (temp_r+temp_l)/2;
+                if (temp == temp_l) {
+                    break;
+                }
+            }else
+            {
+                ret[0] = tmp[i]<tmp[temp]?tmp[i]:tmp[temp];
+                ret[1] = tmp[i]>tmp[temp]?tmp[i]:tmp[temp];
+                //cout << "ret[0],[1] = " <<ret[0]<<","<<ret[1]<<endl;
+                return ret;
             }
         }
     }
@@ -49,6 +88,15 @@ vector<int> twoSum(vector<int> &numbers, int target) {
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "Hello, World!\n";
+    
+    vector<int> test;
+    test.push_back(0);
+    test.push_back(4);
+    test.push_back(3);
+    test.push_back(0);
+    
+    vector<int> ret = twoSum(test, 4);
+    
+    std::cout << ret[0] << " " << ret[1] << endl;
     return 0;
 }
